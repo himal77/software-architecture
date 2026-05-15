@@ -1,0 +1,476 @@
+# Revision Q&A Log
+
+All revision questions asked at the start of each day, with answers and corrections.
+
+---
+
+## Day 2 Revision — Covering Day 1 Content
+
+---
+
+**Q1. What are the 4 questions an architect asks before drawing anything?**
+
+Your answer: They should know what is more important in CAP theorem. Also the architecture should know if the service is read heavy or write heavy.
+
+Correct answer:
+1. **Who uses it, and how?** — read/write ratio, sync/async, internal/consumer-facing
+2. **What are the scale numbers?** — DAU, requests/sec, data volume
+3. **What breaks, and what's the cost?** — defines RPO and RTO
+4. **What are the constraints?** — budget, timeline, compliance, existing stack
+
+Result: Partial — read/write ratio is part of Q1. CAP theorem is applied after the 4 questions, not one of them.
+
+---
+
+**Q2. You're designing a system. The client says "make it fast and cheap." What does the trade-off triangle tell you about what you're sacrificing?**
+
+Your answer: Partition would be neglected, as the system will be built without thinking about performance.
+
+Correct answer: Fast = Performance, Cheap = Cost. You can only pick two corners → **Reliability is sacrificed.** No redundancy, single points of failure, system goes down when something breaks.
+
+Result: Incorrect — confused trade-off triangle with CAP theorem. These are separate tools.
+
+---
+
+**Q3. Your Spring Boot app works fine with one instance. You add a second instance for redundancy and users randomly lose their sessions. What's the root cause and how do you fix it?**
+
+Your answer: The system is stateful, storing all data in-memory. Fix: use Redis as shared cache.
+
+Correct answer: Root cause — sessions stored in local memory, load balancer routes to different instance which has no session. Fix — externalize sessions to Redis. Both instances read/write from same Redis. Design stateless from day 1.
+
+Result: Correct ✅
+
+---
+
+**Q4. A URL shortener has a read/write ratio of 10,000:1. What's your first optimization before thinking about sharding — and why?**
+
+Your answer: Use only one database, store data in cache like Redis as it's read-heavy, system will get instant data from cache.
+
+Correct answer: Cache first, shard second. Redis cache handles ~95% of redirect traffic. DB only hit on cache misses. At 1M users/day, cache likely solves the problem without sharding. Cache buys 100× scale before sharding is needed.
+
+Result: Correct ✅
+
+---
+
+**Q5. Why is sharding a URL shortener by userID wrong? What's the correct shard key?**
+
+Your answer: Sharding by userID may not balance the shard. Sharding by short URL is better as it's the most used data.
+
+Correct answer: The reason is not balance — it's that the primary query (`SELECT url WHERE short_code = ?`) contains no userID. Sharding by userID means you can't route to the correct shard without querying all shards (scatter-gather). Correct shard key: short_code — because that's what you query on.
+
+Rule: Shard by the key you query on, not by logical ownership.
+
+Result: Partial — right shard key, wrong reason.
+
+---
+
+**Q6. Name the 3 approaches to generating unique short codes. Which one fits best when codes expire and get recycled?**
+
+Your answer: Generate all short codes at once and flag as used/unused. Generate on the fly. Generate using time + location. First one fits best.
+
+Correct answer:
+1. **Hash-based** — `base62(MD5(url)).first(6)` — deterministic, no coordination needed
+2. **Centralized counter** — `Redis INCR` → base62 encode — atomic, sequential
+3. **Pre-generated pool** — offline job fills pool, app picks a code — best for expiry/recycling
+
+Best fit for expiry/recycling: pre-generated pool — uniqueness verified offline, not on critical path.
+
+Result: Partial — right best fit, wrong names for the other two approaches.
+
+---
+
+**Q7. You use Redis to count clicks per link. It's 11:58pm and Redis crashes. What data do you lose, and how do you mitigate it?**
+
+Your answer: Flush to DB every 5 min to shrink loss window. Use read Redis + write Redis and sync them.
+
+Correct answer: Flush every 5 min — correct, shrinks loss window from hours to minutes. Read/write Redis split — wrong, doesn't solve crash data loss. Real mitigation: **Redis AOF persistence** — appends every operation to disk log, replays on restart. You lose seconds of data, not hours.
+
+Result: Partial — right instinct on flush frequency, wrong mitigation for crash recovery.
+
+---
+
+**Q8. Why is flushing analytics to the DB every 5 minutes better than once per day?**
+
+Your answer: Less data loss if crash, 5-min flush won't hamper performance.
+
+Correct answer: Three reasons:
+1. **Data loss window** — 5 min max vs 23h58min max
+2. **DB performance** — 288 writes/day vs millions
+3. **Dashboard freshness** — near real-time analytics vs yesterday's data only
+
+Result: Correct ✅ (missed dashboard freshness)
+
+---
+
+**Q9. What is the critical path in a URL shortener? What is the non-critical path?**
+
+Your answer: Short code is the critical path. Clicks are non-critical.
+
+Correct answer: Critical path = operations the user is waiting on: `short_code lookup → fetch original URL → redirect`. Must be <10ms, served from Redis. Non-critical path = recording click analytics. User is already gone, can lag seconds or minutes.
+
+Rule: Ask "is the user waiting for this?" Yes → critical. No → defer/batch/async.
+
+Result: Partial — right components, wrong framing. Critical path is an operation, not a data element.
+
+---
+
+**Q10. bit.ly started with MySQL and later moved hot redirect data to Cassandra. Why Cassandra specifically for redirects?**
+
+Your answer: bit.ly is not a heavy business website, key-value would be enough for their needs.
+
+Correct answer: bit.ly moved to Cassandra *because* traffic became extremely high — MySQL was struggling. Reasons Cassandra fits:
+- Optimized for single-key lookups at massive scale
+- Linear horizontal scaling — add nodes, capacity grows
+- Handles millions of reads/sec with low latency
+- No complex queries needed — Cassandra's weaknesses don't matter
+
+Result: Partial — right pattern, backwards reasoning.
+
+---
+
+**Q11. You have 3 app instances generating short codes simultaneously. Why does the hash-based approach fail when the same URL is used by two different marketing campaigns?**
+
+Your answer: Due to clash of the short key, only 1 app will generate the code, 2 will fail.
+
+Correct answer: The opposite — no app fails. Hash is deterministic: same URL always produces same code. Both campaigns get identical short code → cannot track clicks separately → analytics merged → useless for marketing. This is a business failure, not a technical failure.
+
+Result: Incorrect.
+
+---
+
+**Q12. What are RPO and RTO? Give a concrete example of each.**
+
+Your answer: Not sure.
+
+Correct answer:
+- **RPO (Recovery Point Objective)** — how much data loss is acceptable. Example: payment system RPO = 0 (cannot lose any transaction). URL shortener analytics RPO = 5 min (losing 5 min of click counts is fine).
+- **RTO (Recovery Time Objective)** — how fast must you recover. Example: payment system RTO = seconds (automatic failover). Internal reporting dashboard RTO = 4 hours (manual fix acceptable).
+
+Result: Not answered — taught as new content.
+
+---
+
+## Day 3 Revision — Covering Day 1 + Day 2 Content
+
+---
+
+**Q1. What are the 5 steps you follow in order before writing a single line of architecture?**
+
+Your answer: Budget/timeline, metrics DAU/MAU req/s, who are the users, data loss tolerance, reliability vs cost vs performance.
+
+Correct answer:
+1. Clarify requirements (functional + non-functional) — 2 min
+2. Estimate scale — 3 min
+3. Define data model — 5 min
+4. High-level design — 10 min
+5. Deep dive bottlenecks — remaining time
+
+Your answers map to inputs inside Step 1 and Step 2 only. Steps 3, 4, 5 were missing.
+
+Result: Partial.
+
+---
+
+**Q2. What is the difference between a functional and non-functional requirement? Give one example of each for a ride-sharing app like Uber.**
+
+Your answer: Functional = business need. Non-functional = technical need.
+Functional example: User should be able to find nearest available taxi ✅
+Non-functional example: Use Google Maps API, send via Kafka, taxi driver gets notification ❌
+
+Correct answer: Non-functional describes measurable behavior, not implementation.
+Correct NFR examples: Match driver in <3 sec. 99.99% uptime. One driver per ride (consistency). 10M rides/day (scale).
+
+Rule: If you're naming a technology in an NFR, you've skipped ahead to Step 4.
+
+Result: Partial — functional correct, non-functional had solutions not requirements.
+
+---
+
+**Q3. A Pastebin has 10M DAU and a 5:1 read/write ratio. What is the peak reads/sec and peak writes/sec? Show your working.**
+
+Your answer: Peak reads ~480 req/sec (split users 5:1). Peak writes ~18 req/sec.
+
+Correct answer:
+```
+10M DAU, each user: 1 write/day, 5 reads/day
+Writes/day:  10M × 1 = 10M → avg 116/sec → peak 350/sec
+Reads/day:   10M × 5 = 50M → avg 580/sec → peak 1,750/sec
+Peak = average × 3
+```
+
+Mistake: 5:1 is actions per user, not types of users. Also missing peak multiplier (×3).
+
+Result: Partial — wrong approach and missing peak multiplier.
+
+---
+
+**Q4. Why should you never store large content (like a 10MB paste) directly in Postgres? Where should it go instead?**
+
+Your answer: Only metadata in Postgres. Large content in S3/blob storage. Postgres is for small structured data, not large content.
+
+Correct answer: Correct. Additional reasons not mentioned:
+1. Query performance — Postgres reads entire rows into memory, large blobs pollute buffer cache
+2. Cost — Postgres storage is 10–50× more expensive than S3 per GB
+
+Result: Correct ✅
+
+---
+
+**Q5. You're writing a paste to Postgres and S3. Postgres succeeds, S3 fails. What pattern prevents a broken paste being shown to users?**
+
+Your answer: S3 first, then Postgres. If Postgres fails, cleanup via Postgres metadata. Not business critical so data loss doesn't matter.
+
+Correct answer: S3-first has a flaw — if Postgres write fails after S3 succeeds, user loses their content silently with no recovery path.
+
+Correct pattern — PENDING status:
+1. Write metadata → Postgres (status = PENDING)
+2. Upload content → S3
+3. Update → Postgres (status = ACTIVE)
+4. Cache → Redis
+Only ACTIVE pastes shown. Background job retries PENDING records.
+
+Result: Partial — S3-first has silent data loss flaw. PENDING status is the correct pattern.
+
+---
+
+**Q6. What is a thundering herd? Give a concrete scenario and the solution.**
+
+Your answer: Sudden spike in traffic reaching system capacity limit. Blog goes viral, 100–1000× traffic spike.
+
+Correct answer: Thundering herd is specifically about simultaneous cache misses on the same key — not a general traffic spike.
+```
+10,000 users click viral link simultaneously
+→ All hit Redis → all miss (cold cache)
+→ All 10,000 query Postgres for same row
+→ DB gets 10,000 identical queries → crashes
+```
+Solution: Cache mutex — first request acquires lock, fetches DB, populates cache. Others wait and read from cache. Result: 1 DB query instead of 10,000.
+
+Result: Partial — described traffic spike, not the cache miss mechanism.
+
+---
+
+**Q7. What does CDN stand for and what problem does it solve? When should you NOT use a CDN?**
+
+Your answer: Content Delivery Network. Reduces access time. Content cached at nearest edge node. Heavy/frequently requested content only moved.
+
+Correct answer: Correct. When NOT to use CDN:
+- Private content (CDN caches publicly)
+- Highly dynamic/real-time data
+- User-specific personalized responses
+- Low-traffic content (high miss rate, pay CDN cost with little benefit)
+
+Result: Correct ✅
+
+---
+
+**Q8. What is the difference between RPO and RTO? For a payment system, what values would you set?**
+
+Your answer: RPO = data loss tolerance. RTO = recovery time tolerance. Both near zero for payments.
+
+Correct answer: ✅ Both definitions correct. Both near-zero for payments.
+- RPO = 0 → synchronous replication, write confirmed only after all replicas acknowledge
+- RTO = seconds → automatic failover, standby promoted with no human intervention
+
+Full forms: RPO = Recovery Point Objective. RTO = Recovery Time Objective.
+
+Result: Correct ✅
+
+---
+
+**Q9. Back-of-envelope: 500M DAU, 3 writes/day, 50 reads/day. Peak writes/sec and reads/sec?**
+
+Your answer: Peak writes ~52,000/sec ✅. Peak reads ~87,000/sec ❌
+
+Correct answer:
+```
+Writes: 500M × 3 = 1.5B/day → 17,361 avg → 52,000 peak ✅
+Reads:  500M × 50 = 25B/day → 289,352 avg → 868,000 peak
+```
+
+Mistake: Used 25M instead of 25B for reads — dropped 3 zeros.
+
+Rule: Always write out full multiplication before dividing by 86,400.
+
+Result: Partial — writes correct, reads 10× off.
+
+---
+
+**Q10. Redis has 30-min TTL on 1M keys all set at 2am. What problem occurs at 2:30am and how do you fix it?**
+
+Your answer: All keys expire simultaneously → cache miss on all → if users spike, all hit DB → DB crashes. Fix: reload cache when count drops, or use TTL jitter (30 ± 5 sec).
+
+Correct answer: ✅ This is a cache avalanche (different from thundering herd — many different keys, not one cold key).
+Jitter range too small — 5 sec spreads 1M expirations over 10 sec = 100K/sec still a spike.
+Better: `30min ± random(0–10min)` → spreads over 20-min window → ~833 expirations/sec.
+
+Result: Correct ✅ (jitter range too small)
+
+---
+
+**Q11. What is the metadata + blob storage pattern? Name two real companies that use it.**
+
+Your answer: Metadata = info about content. Content in blob/S3. Two separate storage systems. Pastebin and GitHub use it.
+
+Correct answer: ✅ Correct pattern and companies.
+Pastebin: Postgres stores paste_id, s3_key, metadata (~200B). S3 stores text content (up to 10MB).
+GitHub Gist: MySQL stores gist_id, owner, metadata. Git objects store actual code content.
+Why: Performance + cost + scalability.
+
+Result: Correct ✅
+
+---
+
+**Q12. A stakeholder says "make it 99.999% available." What two questions do you ask back?**
+
+Your answer: What is the budget? What is RPO?
+
+Correct answer:
+1. ✅ "What is the budget?" — five nines costs 10× more than 99.9%. Stakeholders often don't know this.
+2. "Which components need this?" — usually only the critical path needs five nines. Building the whole system to five nines wastes money.
+
+RPO is a separate requirement, not a question about availability.
+
+Availability reference:
+- 99% = 3.65 days downtime/year
+- 99.9% = 8.7 hours/year
+- 99.99% = 52 minutes/year
+- 99.999% = 5 minutes/year
+
+Result: Partial — budget correct, RPO misplaced.
+
+---
+
+## Day 4 Revision — Covering Days 1–3 Content
+
+---
+
+**Q1. What are the 3 system archetypes? For each, name the dominant hard problem.**
+
+Your answer: Read-heavy (cache strategy, storage cost, read latency), Write-heavy (write throughput, durability, ordering, consumer lag), Compute-heavy (job scheduling, worker scaling, partial failure, idempotency).
+
+Result: Perfect ✅
+
+---
+
+**Q2. What is an ADR and what is the single most important element — and why?**
+
+Your answer: ADR documents a decision, shows tradeoffs, explains why one solution was chosen over others. Most important element: the Decision.
+
+Correct answer: Most important element is **Alternatives Considered** — not the Decision.
+The Decision is visible from the code/architecture anyway. Alternatives Considered is the reasoning that exists nowhere else. Without it, a future engineer might "fix" your design without knowing you already evaluated and rejected their approach.
+
+Result: Partial — purpose correct, wrong most important element.
+
+---
+
+**Q3. Why can't you run SELECT user_id WHERE push=true at flash sale start on 50M users? What do you do instead?**
+
+Your answer: Will have latency of 30s–120s+. Pre-populate segment in Redis cache via nightly offline job, read from Redis at sale start.
+
+Correct answer: ✅ Full table scan on 50M rows takes 30–120s+. Flash sale might be 10 min total — notifications arrive after sale ends. Fix: nightly offline job pre-computes segment → Redis SET → read instantly at sale start.
+
+Result: Correct ✅ (initially skipped the why, added when prompted)
+
+---
+
+**Q4. What check does a worker perform before sending a push notification, and what happens if the check fails?**
+
+Your answer: Check expiration time of sale. If expired, don't forward.
+
+Correct answer: Check `now > expires_at`. If expired → write status=EXPIRED to Cassandra, then discard. Two reasons to write EXPIRED: business visibility (how many users missed it) and ops visibility (spike in EXPIRED = consumer lag too high).
+
+Result: Partial — missed writing EXPIRED status to DB initially.
+
+---
+
+**Q5. What is thundering herd? How is it different from cache avalanche?**
+
+Your answer: Thundering herd — 10M users, cache miss, DB hit 10M times for same key. Fix: lock row, read once, cache, all others read from cache. Cache avalanche — all cache items expire at same time, DB hit with surge of traffic.
+
+Result: Correct ✅ (minor: thundering herd is about one cold key, not necessarily 10M users)
+
+---
+
+**Q6. A stakeholder NFR says "Use Kafka for all async communication." What's wrong with this?**
+
+Your answer: Need to understand system first — which parts are critical, how important is lag.
+
+Correct answer: "Use Kafka" is a **technology choice / solution**, not a non-functional requirement. NFRs must describe measurable behavior, not implementation.
+Correct NFR: "Async events must be delivered within 30 seconds" / "Handle 10,000 events/sec without data loss."
+
+Rule: If you're naming a technology in an NFR, you've skipped ahead to Step 4.
+
+Result: Partial — answered how to evaluate, not what's wrong with the statement itself.
+
+---
+
+**Q7. 50M users, 200 notifications/year, 500 bytes each. Storage needed and which DB?**
+
+Your answer: ~5TB. Postgres.
+
+Correct answer: Storage = 5TB ✅. Database = Cassandra, not Postgres.
+- 10B rows — Postgres degrades badly at this scale
+- Access pattern: append-only writes, query by user_id + created_at → Cassandra's native pattern
+- Cassandra: ~100K writes/sec/node vs Postgres ~10K
+- Horizontal scale built-in — add nodes, capacity grows linearly
+
+Rule: Match DB to access pattern AND scale. 10B append-only rows queried by partition key = Cassandra.
+
+Result: Partial — storage correct, wrong DB choice.
+
+---
+
+**Q8. What are the two Kafka operational problems in a notification system at scale?**
+
+Your answer: Not sure.
+
+Correct answer (taught as new content):
+1. **Consumer lag** — producers push faster than workers consume. Lag grows → messages expire → users missed. Detect: Kafka consumer group lag metric → alert + auto-scale.
+2. **Duplicate notifications** — worker sends to FCM, ACK lost due to network blip, worker retries, user gets same notification twice. Fix: idempotency key per notification_id sent to provider.
+
+Result: Not answered — taught as new content.
+
+---
+
+**Q9. Walk through all 5 steps of creating a Pastebin paste using the PENDING status pattern.**
+
+Your answer: Metadata in Postgres as PENDING → content in S3 → background process updates to ACTIVE → background process updates Redis → return 200.
+
+Correct answer: ACTIVE update happens in the **same request**, not a background process.
+```
+1. INSERT metadata → Postgres (status=PENDING)
+2. PUT content → S3
+3. UPDATE metadata → Postgres (status=ACTIVE)
+4. SET metadata → Redis
+5. Return paste_id + 200 to client
+
+Background job (every 5 min) handles FAILURES only:
+  PENDING > 10 min → S3 exists? retry step 3 | S3 missing? retry steps 2+3
+  N retries failed → status=FAILED, alert
+```
+
+Result: Partial — steps correct, background job in wrong role.
+
+---
+
+**Q10. What is metadata + blob pattern and the 3 reasons not to store large content in Postgres?**
+
+Your answer: Store metadata in DB, content in S3. Reasons: DB meant for small data, memory fills faster, S3 scales to petabytes and is cheaper.
+
+Correct answer: ✅ Correct. Precise versions:
+1. **Query performance** — large columns pollute buffer cache, slow index scans
+2. **Cost** — DB storage 10–50× more expensive than S3 per GB
+3. **Scalability** — S3 scales to exabytes transparently; Postgres does not
+
+Result: Correct ✅
+
+---
+
+## Score Summary
+
+| Day | Score | Main Gaps |
+|---|---|---|
+| Day 2 revision (Day 1 content) | 8.5/12 | CAP vs trade-off triangle, RPO/RTO unknown, hash-based collision misunderstood |
+| Day 3 revision (Day 1+2 content) | 8.5/12 | 5-step framework, NFR vs solution, dropping zeros in calculations, thundering herd mechanism |
+| Day 4 revision (Days 1–3 content) | 7.5/10 | Alternatives Considered is most important ADR element, NFR vs solution (recurring), wrong DB for 10B rows, consumer lag + idempotency unknown |

@@ -1,0 +1,108 @@
+# System Architecture — 90-Day Learning Journal
+
+**Goal:** Transition from software engineer to system architect
+**Start date:** 2026-05-11 | **Target date:** 2026-08-09
+**Schedule:** 5 hours/day × 90 days = 450 hours
+
+---
+
+## Files
+
+| File | Purpose |
+|---|---|
+| [90-day-curriculum.md](90-day-curriculum.md) | Full curriculum — all 16 chapters, progress tracker |
+| [rules.md](rules.md) | How each session works — revision quiz rules, note format |
+| [qa.md](qa.md) | All revision Q&A — every question, your answer, correction, score |
+| [concepts/](concepts/) | One file per major concept — reference glossary |
+| [notes/](notes/) | One file per day — what was taught, designed, and learned |
+| [designs/](designs/) | System designs drawn during problems — full architecture docs |
+| [case-studies/](case-studies/) | Real company case studies (bit.ly, Netflix, Uber, etc.) |
+
+---
+
+## Progress
+
+### Phase 1 — Foundations (Days 1–20)
+| Day(s) | Chapter | Note | Status |
+|---|---|---|---|
+| 1 | Ch.1: The Architect's Mindset | [day1-architects-mindset.md](notes/day1-architects-mindset.md) | ✅ Done |
+| 2 | Ch.1: The Architect's Mindset | [day2-architects-framework.md](notes/day2-architects-framework.md) | ✅ Done |
+| 3 | Ch.1: The Architect's Mindset | [day3-unknown-systems-adr.md](notes/day3-unknown-systems-adr.md) | ✅ Done |
+| 4–10 | Ch.2: Distributed Systems Theory | — | ⬜ |
+| 11–15 | Ch.3: Networking & Protocols | — | ⬜ |
+| 16–20 | Ch.4: API Design Patterns | — | ⬜ |
+
+### Phase 2 — Data Layer Mastery (Days 21–40)
+| Day(s) | Chapter | Note | Status |
+|---|---|---|---|
+| 21–28 | Ch.5: Database Internals | — | ⬜ |
+| 29–33 | Ch.6: Caching | — | ⬜ |
+| 34–40 | Ch.7: Data Pipelines & Streaming | — | ⬜ |
+
+### Phase 3 — Scalability Patterns (Days 41–55)
+| Day(s) | Chapter | Note | Status |
+|---|---|---|---|
+| 41–45 | Ch.8: Scaling Strategies | — | ⬜ |
+| 46–50 | Ch.9: Partitioning & Sharding | — | ⬜ |
+| 51–55 | Ch.10: Advanced Patterns | — | ⬜ |
+
+### Phase 4 — Reliability & Resilience (Days 56–68)
+| Day(s) | Chapter | Note | Status |
+|---|---|---|---|
+| 56–62 | Ch.11: Fault Tolerance | — | ⬜ |
+| 63–68 | Ch.12: Observability | — | ⬜ |
+
+### Phase 5 — Infrastructure & Security (Days 69–78)
+| Day(s) | Chapter | Note | Status |
+|---|---|---|---|
+| 69–73 | Ch.13: Infrastructure Patterns | — | ⬜ |
+| 74–78 | Ch.14: Security Architecture | — | ⬜ |
+
+### Phase 6 — Synthesis & Real Design (Days 79–90)
+| Day(s) | Chapter | Note | Status |
+|---|---|---|---|
+| 79–85 | Ch.15: Classic System Designs | — | ⬜ |
+| 86–90 | Ch.16: Architecture Defense | — | ⬜ |
+
+---
+
+## Concepts Learned
+
+| Concept | Introduced | File |
+|---|---|---|
+| Architect's 4 questions | Day 1 | [architects-4-questions.md](concepts/architects-4-questions.md) |
+| Trade-off triangle | Day 1 | [tradeoff-triangle.md](concepts/tradeoff-triangle.md) |
+| Scale inflection points | Day 1 | [scale-inflection-points.md](concepts/scale-inflection-points.md) |
+| Shard by query pattern | Day 1 | [sharding.md](concepts/sharding.md) |
+| Write-behind caching | Day 1 | [caching-patterns.md](concepts/caching-patterns.md) |
+| Critical vs non-critical path | Day 1 | [critical-path.md](concepts/critical-path.md) |
+| Pre-generated code pool | Day 1 | [id-generation.md](concepts/id-generation.md) |
+| 5-step design framework | Day 2 | [day2-architects-framework.md](notes/day2-architects-framework.md) |
+| Metadata + blob storage pattern | Day 2 | [metadata-blob-pattern.md](concepts/metadata-blob-pattern.md) |
+| PENDING status pattern | Day 2 | [pending-status-pattern.md](concepts/pending-status-pattern.md) |
+| Thundering herd | Day 2 | [thundering-herd.md](concepts/thundering-herd.md) |
+| CDN | Day 2 | [cdn.md](concepts/cdn.md) |
+| 3 System Archetypes | Day 3 | [system-archetypes.md](concepts/system-archetypes.md) |
+| Architecture Decision Records | Day 3 | [adr.md](concepts/adr.md) |
+| Message TTL Check | Day 3 | [message-ttl.md](concepts/message-ttl.md) |
+| Kafka Priority Lanes | Day 3 | [kafka-priority-lanes.md](concepts/kafka-priority-lanes.md) |
+
+---
+
+## System Designs Built
+
+| System | Day | File | Scale |
+|---|---|---|---|
+| URL Shortener | Day 1 | [url-shortener.md](designs/url-shortener.md) | 100 → 1B users |
+| Pastebin | Day 2 | [pastebin.md](designs/pastebin.md) | 10M DAU |
+| Notification System | Day 3 | [notification-system.md](designs/notification-system.md) | 50M users |
+
+---
+
+## Case Studies
+
+| Company | System | Day | File |
+|---|---|---|---|
+| bit.ly / TinyURL | URL Shortener | Day 1 | [bitly.md](case-studies/bitly.md) |
+| GitHub Gist | Pastebin at scale | Day 2 | [github-gist.md](case-studies/github-gist.md) |
+| Uber Eats | Notification system | Day 3 | [uber-eats-notifications.md](case-studies/uber-eats-notifications.md) |
