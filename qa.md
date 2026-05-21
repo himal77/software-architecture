@@ -573,6 +573,347 @@ Result: Partial — one cause found after prompting, CDN TTL missed entirely.
 
 ---
 
+## Day 6 Revision — Covering Days 1–5 Content
+
+---
+
+**Q1. 3 clock problems and the rule architects follow.**
+
+Your answer: Clock skew, clock drift, time goes backward. Rule (after prompting): never use wall clock for ordering, use counter between servers.
+
+Result: Partial — 3 problems correct, missed rule initially.
+
+---
+
+**Q2. Difference between Lamport timestamps and vector clocks. When use vector clocks?**
+
+Your answer: Lamport counter is same in all servers, vector clock tracks per node.
+
+Correct answer: Lamport tells you A happened before B. Vector clocks additionally detect **concurrent events** (no causal relationship). Use vector clocks when you need to detect conflicts from concurrent writes (DynamoDB shopping carts).
+
+Result: Partial — right idea, missed concurrent event detection.
+
+---
+
+**Q3. BASE — name all 3 properties and contrast with ACID.**
+
+Your answer: Eventual consistency (E), Basically available (B), Soft state (S — after prompt). Soft state defined as "background running happens."
+
+Correct: Soft state = state changes over time without new input as replicas converge. Contrast with ACID Isolation which freezes state during transactions.
+
+Result: Partial — 2/3 properties initially, soft state definition vague.
+
+---
+
+**Q4. 4 isolation levels weakest to strongest. Postgres default?**
+
+Your answer: Atomicity, Consistency, Isolation, Durability (confused with ACID properties).
+
+Correct (taught as new content):
+- Read Uncommitted (allows dirty reads)
+- Read Committed (Postgres default — prevents dirty reads)
+- Repeatable Read (prevents non-repeatable reads)
+- Serializable (prevents all anomalies including phantoms)
+
+Result: Not answered — taught as new content.
+
+---
+
+**Q5. Redis Sorted Set — 3 commands: add score, increment, get top-100.**
+
+Your answer: Don't know.
+
+Correct (taught as new content):
+- ZADD leaderboard 1500 "player_alice"
+- ZINCRBY leaderboard 50 "player_alice"
+- ZREVRANGE leaderboard 0 99 WITHSCORES
+
+Bonus: ZREVRANK leaderboard "player_alice" for own rank.
+
+Result: Not answered — taught as new content.
+
+---
+
+**Q6. Payment startup needs global scale + strong consistency. What database?**
+
+Your answer: Google Spanner — ACID in distributed environment.
+
+Result: Correct ✅ (added: CockroachDB as open-source alternative)
+
+---
+
+**Q7. Same consistency model, different lag SLAs (5s vs 30s). How?**
+
+Your answer: Use CDN to push updates so SLA is less.
+
+Correct: CDN solves top-100 delivery but can't serve own rank (personalized).
+Real answer: **tunable consistency** — same eventual consistency, different quorum:
+- Top-100: consistency=ONE → fastest, 30s lag
+- Own rank: consistency=QUORUM → fresher, 5s lag
+
+Rule: Don't change consistency model for tighter lag — tune the quorum.
+
+Result: Partial — CDN correct, missed tunable quorum.
+
+---
+
+**Q8. What is quorum? If N=3, W=2, R=2, what does W+R>N guarantee?**
+
+Your answer: Don't know.
+
+Correct (taught as new content):
+- Quorum = majority must agree before operation succeeds
+- W+R>N guarantees overlap between write set and read set
+- Therefore guaranteed to read at least one node with latest write
+- Same concept as Kafka min.insync.replicas
+
+Result: Not answered — taught as new content.
+
+---
+
+**Q9. 100M players, 10 updates/session, 1hr session, 20% active. Updates/sec?**
+
+Your answer: ~55K (after working through).
+
+Correct: 100M × 20% = 20M active. 20M × 10 = 200M/hr. 200M / 3600 = ~55,556/sec average. Peak (×3) = ~166,000/sec.
+
+Add: at 166K peak, write batching needed (buffer per-player 100ms, write sum once).
+
+Result: Correct ✅
+
+---
+
+**Q10. AP system after partition heals — 3 conflict resolution strategies?**
+
+Your answer: Eventual consistency (the goal, not a strategy). Then: based on counter (LWW with logical clock).
+
+Correct (1 of 3 named):
+1. **Last Write Wins** ✅ — highest counter wins (Cassandra default)
+2. **Merge** — combine values (DynamoDB carts, CRDTs)
+3. **Ask the user** — present conflict, let human decide (Google Docs, Git, Dropbox)
+
+Result: Partial — 1/3 named, others taught.
+
+---
+
+## Day 7 Revision — Covering Days 1–6 Content
+
+---
+
+**Q1. What is consensus and why does FLP impossibility matter?**
+
+Your answer: Consensus is the way to make the system consistent. Not sure about FLP.
+
+Correct: Consensus = getting unreliable nodes to agree on a single value despite failures. FLP (1985): in async network with even one faulty node, no consensus algorithm can guarantee both safety AND liveness. Real systems sacrifice liveness during partitions to preserve safety.
+
+Result: Partial — consensus correct, FLP unknown.
+
+---
+
+**Q2. Why does Raft use odd numbers (3, 5, 7) and never even?**
+
+Your answer: So decision can be made — even numbers can split decision.
+
+Correct ✅. 3=tolerates 1 failure, 5=2 failures, 7=3 failures. Even numbers split exactly during partition → no majority on either side → cluster halts.
+
+Result: Correct ✅
+
+---
+
+**Q3. TTL/lease pattern in distributed locks. Why not "release on crash"?**
+
+Your answer: Releasing on crash can be false info, could be due to high request for heartbeat. TTL=30s, renew every 10s.
+
+Correct ✅. Lock service can't distinguish: crashed, slow, network blip. TTL must be > processing time but short enough for fast recovery.
+
+Result: Correct ✅
+
+---
+
+**Q4. Cassandra N=3, W=1, R=1. Consistency for banking?**
+
+Your answer: Not good enough. With W=1, R=1 leader and one node guarantee consistency — but two different data if leader goes down.
+
+Correct: Cassandra is leaderless — no leader/follower. Real reason: W+R = 2, not > 3. No overlap guaranteed → can read replica without latest write. For banking need W+R>N: W=2, R=2 with N=3.
+
+Result: Partial — right verdict, leader/follower framing wrong for Cassandra.
+
+---
+
+**Q5. What is split brain and why with 2-node setups?**
+
+Your answer: Don't know.
+
+Correct (taught): Network partition divides cluster. Each side thinks it's authoritative, both accept writes. Result: conflicting data impossible to safely reconcile.
+2 nodes: each thinks the other crashed → both accept writes → split brain.
+Solved by odd numbers + majority quorum: minority side halts.
+
+Result: Not answered — taught as new content.
+
+---
+
+**Q6. 50M users, 5min sessions, 10 page views/session, 30% active. Page views/sec at peak?**
+
+Your answer: 1.5 million views/sec. Working: 15M × 3 × 10 / 300.
+
+Correct: 50M × 30% = 15M active. 15M × 10 = 150M views/day. 150M / 86,400 = ~1,736/sec avg. Peak ×3 = ~5,208/sec.
+
+Mistake: divided by 300 (not 86,400). Multiplied by 3 before averaging. Recurring formula gap.
+
+Rule:
+1. Active users = total × active%
+2. Daily events = active users × events/user
+3. Avg/sec = daily / 86,400
+4. Peak = avg × 3 (apply LAST)
+
+Result: Wrong — recurring capacity formula gap.
+
+---
+
+**Q7. Lamport vs vector clocks. When use vector clocks?**
+
+Your answer: Lamport counter per node, vector clocks counter from all nodes preventing inconsistency.
+
+Correct: Lamport tells you A happened before B. Vector clocks ALSO detect concurrent events (no causal relationship). Use vector clocks specifically to detect concurrent writes for conflict resolution (DynamoDB shopping carts).
+
+Result: Partial — structural difference correct, missed concurrent detection purpose.
+
+---
+
+**Q8. @Transactional without isolation level — what's used and what anomaly does it allow?**
+
+Your answer: Atomic commit guaranteed by @transactional.
+
+Correct: Postgres default = Read Committed. Allows non-repeatable reads (same query returns different result mid-transaction if another commits). Step up to Serializable for financial transactions.
+
+Result: Not answered — recurring gap from Day 6.
+
+---
+
+**Q9. Name all 3 BASE properties without prompting.**
+
+Your answer: Basically available, soft state, eventual consistency.
+
+Result: Correct ✅ — recall improving!
+
+---
+
+**Q10. Global scale + strong consistency — category and 2 products?**
+
+Your answer: NewSQL — Google Spanner (enterprise) or CockroachDB (startup, open-source).
+
+Result: Correct ✅
+
+---
+
+## Day 8 Revision — Covering Days 1–7 Content
+
+---
+
+**Q1. 200M users, 40% daily, 4 videos × 30 min each. Avg + peak concurrent viewers?**
+
+Your answer: 80M × 4 × 30 × 60 = 576K views/sec × 3 = 1.73M/sec.
+
+Correct: This is concurrent VIEWERS, not views/sec.
+80M × 4 × 30 = 9.6B user-minutes/day
+9.6B / 1,440 (minutes/day) = ~6.67M concurrent avg
+Peak (×3) = ~20M concurrent
+
+Formula: `(active × time_per_user) / total_time_window`
+
+Result: Wrong — concurrent users is a different formula than events/sec.
+
+---
+
+**Q2. Postgres default isolation level + anomaly it allows?**
+
+Your answer: Read write commit. Returns stale data.
+
+Correct: **Read Committed**. Allows non-repeatable reads (same query mid-transaction returns different result if another commits).
+
+Result: Partial — wrong term, wrong anomaly. Recurring gap.
+
+---
+
+**Q3. Split brain — why dangerous in 2-node?**
+
+Your answer: Both can't ping each other, both become leader, hard to tell actual leader. (Then prompted) Both have different data, need 3 conflict mechanisms.
+
+Result: Correct ✅
+
+---
+
+**Q4. Single-leader vs multi-leader vs leaderless. One DB each.**
+
+Your answer: Single-leader = Postgres ✅. Multi-leader = Spanner (wrong — that's NewSQL). Leaderless = CockroachDB (wrong — that's NewSQL).
+
+Correct:
+- Single-leader = Postgres / MySQL / MongoDB ✅
+- Multi-leader = CouchDB / MySQL circular
+- Leaderless = Cassandra / DynamoDB / Riak
+- NewSQL (separate category) = Spanner / CockroachDB
+
+Result: Partial — single-leader correct, others mixed up.
+
+---
+
+**Q5. Polyglot persistence + why?**
+
+Your answer: Multiple DBs based on need. Amazon: Postgres for payment, Cassandra for viewing.
+
+Result: Correct ✅
+
+---
+
+**Q6. Why DynamoDB for cross-device cart? Which mechanism handles concurrent writes?**
+
+Your answer: DynamoDB best because reads happen across leaderless DBs, viewable immediately.
+
+Correct: DynamoDB chosen because of **vector clocks** detecting concurrent writes from different devices → MERGE both items into cart. Single-leader with last-write-wins would silently lose items.
+
+Result: Wrong — missed vector clocks + merge purpose.
+
+---
+
+**Q7. Product catalog: 10M products, 100K reads/sec, 100 writes/day. DB + replication?**
+
+Your answer: CDN + Cassandra.
+
+Correct: CDN ✅. **Postgres single-leader + read replicas + CDN** — NOT Cassandra.
+Cassandra is for write throughput, not read throughput. With 100 writes/day, Cassandra is overkill and gives weaker consistency than needed for price updates.
+
+Result: Partial — CDN correct, Cassandra wrong choice.
+
+---
+
+**Q8. Read-after-write trap + most common solution?**
+
+Your answer: Don't know.
+
+Correct (taught): User writes to leader, immediately reads from follower (still has old data) → "I just updated this!" Solution: route the writer's reads to leader for ~60 seconds after write.
+
+Result: Not answered — taught.
+
+---
+
+**Q9. 80M users, 5 API calls/day. Peak/sec? Show steps.**
+
+Your answer: 80M × 5 = 400M/day. 400M / 86,400 = 4,629/sec. × 3 = 14,184/sec peak.
+
+Result: Correct ✅ — capacity formula clean for events/sec.
+
+---
+
+**Q10. 3-device cart updates — why multi-leader poor fit, what's better?**
+
+Your answer: Multi-leader gets data from different devices, will be inconsistent. Better: DynamoDB.
+
+Correct ✅. Sharpened: multi-leader uses LWW timestamps → silent data loss. Leaderless with vector clocks → detects concurrent → merges → no data loss.
+
+Result: Correct ✅
+
+---
+
 ## Score Summary
 
 | Day | Score | Main Gaps |
@@ -581,3 +922,6 @@ Result: Partial — one cause found after prompting, CDN TTL missed entirely.
 | Day 3 revision (Day 1+2 content) | 8.5/12 | 5-step framework, NFR vs solution, dropping zeros in calculations, thundering herd mechanism |
 | Day 4 revision (Days 1–3 content) | 7.5/10 | Alternatives Considered is most important ADR element, NFR vs solution (recurring), wrong DB for 10B rows, consumer lag + idempotency unknown |
 | Day 5 revision (Days 1–4 content) | 7/8 | Sequential consistency wrong example, Kafka CP params unknown, detection methods missing, stale data causes needed prompting |
+| Day 6 revision (Days 1–5 content) | 6/10 | Isolation levels unknown, Redis ZSET commands unknown, quorum math unknown, conflict strategies (only 1 of 3) |
+| Day 7 revision (Days 1–6 content) | 7/10 | FLP unknown, Cassandra leader/follower confusion, split brain unknown, capacity formula scrambled, isolation levels still unknown |
+| Day 8 revision (Days 1–7 content) | 6.5/10 | Concurrent users formula new variant, Postgres default term wrong, multi-leader/leaderless mixed up, vector clocks for carts missed, Cassandra wrong for read-heavy catalog |

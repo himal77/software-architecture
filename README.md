@@ -30,7 +30,10 @@
 | 3 | Ch.1: The Architect's Mindset | [day3-unknown-systems-adr.md](notes/day3-unknown-systems-adr.md) | ✅ Done |
 | 4 | Ch.2: Distributed Systems Theory | [day4-distributed-systems-cap.md](notes/day4-distributed-systems-cap.md) | ✅ Done |
 | 5 | Ch.2: Distributed Systems Theory | [day5-acid-base-clocks.md](notes/day5-acid-base-clocks.md) | ✅ Done |
-| 6–10 | Ch.2: Distributed Systems Theory | — | ⬜ |
+| 6 | Ch.2: Distributed Systems Theory | [day6-consensus-raft.md](notes/day6-consensus-raft.md) | ✅ Done |
+| 7 | Ch.2: Distributed Systems Theory | [day7-replication-strategies.md](notes/day7-replication-strategies.md) | ✅ Done |
+| 8 | Ch.2: Distributed Systems Theory | [day8-partitioning-sharding.md](notes/day8-partitioning-sharding.md) | ✅ Done |
+| 9–10 | Ch.2: Distributed Systems Theory | — | ⬜ |
 | 11–15 | Ch.3: Networking & Protocols | — | ⬜ |
 | 16–20 | Ch.4: API Design Patterns | — | ⬜ |
 
@@ -94,6 +97,12 @@
 | ACID vs BASE | Day 5 | [acid-base.md](concepts/acid-base.md) |
 | Distributed Clocks | Day 5 | [distributed-clocks.md](concepts/distributed-clocks.md) |
 | Redis Sorted Sets | Day 5 | [redis-sorted-sets.md](concepts/redis-sorted-sets.md) |
+| Consensus & Raft | Day 6 | [consensus-raft.md](concepts/consensus-raft.md) |
+| Distributed Locks | Day 6 | [distributed-locks.md](concepts/distributed-locks.md) |
+| Replication Strategies | Day 7 | [replication-strategies.md](concepts/replication-strategies.md) |
+| Polyglot Persistence | Day 7 | [polyglot-persistence.md](concepts/polyglot-persistence.md) |
+| Partitioning Strategies | Day 8 | [partitioning-strategies.md](concepts/partitioning-strategies.md) |
+| Consistent Hashing | Day 8 | [consistent-hashing.md](concepts/consistent-hashing.md) |
 
 ---
 
@@ -106,6 +115,9 @@
 | Notification System | Day 3 | [notification-system.md](designs/notification-system.md) | 50M users |
 | Live Scoreboard | Day 4 | [scoreboard.md](designs/scoreboard.md) | 500M users |
 | Game Leaderboard | Day 5 | [leaderboard.md](designs/leaderboard.md) | 100M players |
+| Distributed Lock Service | Day 6 | [distributed-lock-service.md](designs/distributed-lock-service.md) | 100 servers |
+| E-commerce Data Layer | Day 7 | [ecommerce-data-layer.md](designs/ecommerce-data-layer.md) | 100M users |
+| Messaging System | Day 8 | [messaging-system.md](designs/messaging-system.md) | 2B users |
 
 ---
 
@@ -118,3 +130,6 @@
 | Uber Eats | Notification system | Day 3 | [uber-eats-notifications.md](case-studies/uber-eats-notifications.md) |
 | ESPN | Live scoreboard at scale | Day 4 | [espn-scoreboard.md](case-studies/espn-scoreboard.md) |
 | Clash of Clans | Global game leaderboard | Day 5 | [clash-of-clans-leaderboard.md](case-studies/clash-of-clans-leaderboard.md) |
+| Kubernetes etcd | Raft consensus in production | Day 6 | [kubernetes-etcd.md](case-studies/kubernetes-etcd.md) |
+| Amazon | Polyglot persistence | Day 7 | [amazon-polyglot.md](case-studies/amazon-polyglot.md) |
+| WhatsApp | Messaging at 2B-user scale | Day 8 | [whatsapp.md](case-studies/whatsapp.md) |
