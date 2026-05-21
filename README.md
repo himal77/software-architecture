@@ -28,7 +28,9 @@
 | 1 | Ch.1: The Architect's Mindset | [day1-architects-mindset.md](notes/day1-architects-mindset.md) | ✅ Done |
 | 2 | Ch.1: The Architect's Mindset | [day2-architects-framework.md](notes/day2-architects-framework.md) | ✅ Done |
 | 3 | Ch.1: The Architect's Mindset | [day3-unknown-systems-adr.md](notes/day3-unknown-systems-adr.md) | ✅ Done |
-| 4–10 | Ch.2: Distributed Systems Theory | — | ⬜ |
+| 4 | Ch.2: Distributed Systems Theory | [day4-distributed-systems-cap.md](notes/day4-distributed-systems-cap.md) | ✅ Done |
+| 5 | Ch.2: Distributed Systems Theory | [day5-acid-base-clocks.md](notes/day5-acid-base-clocks.md) | ✅ Done |
+| 6–10 | Ch.2: Distributed Systems Theory | — | ⬜ |
 | 11–15 | Ch.3: Networking & Protocols | — | ⬜ |
 | 16–20 | Ch.4: API Design Patterns | — | ⬜ |
 
@@ -86,6 +88,12 @@
 | Architecture Decision Records | Day 3 | [adr.md](concepts/adr.md) |
 | Message TTL Check | Day 3 | [message-ttl.md](concepts/message-ttl.md) |
 | Kafka Priority Lanes | Day 3 | [kafka-priority-lanes.md](concepts/kafka-priority-lanes.md) |
+| CAP Theorem | Day 4 | [cap-theorem.md](concepts/cap-theorem.md) |
+| Consistency Models | Day 4 | [consistency-models.md](concepts/consistency-models.md) |
+| WebSockets — Push vs Poll | Day 4 | [websockets-push-vs-poll.md](concepts/websockets-push-vs-poll.md) |
+| ACID vs BASE | Day 5 | [acid-base.md](concepts/acid-base.md) |
+| Distributed Clocks | Day 5 | [distributed-clocks.md](concepts/distributed-clocks.md) |
+| Redis Sorted Sets | Day 5 | [redis-sorted-sets.md](concepts/redis-sorted-sets.md) |
 
 ---
 
@@ -96,6 +104,8 @@
 | URL Shortener | Day 1 | [url-shortener.md](designs/url-shortener.md) | 100 → 1B users |
 | Pastebin | Day 2 | [pastebin.md](designs/pastebin.md) | 10M DAU |
 | Notification System | Day 3 | [notification-system.md](designs/notification-system.md) | 50M users |
+| Live Scoreboard | Day 4 | [scoreboard.md](designs/scoreboard.md) | 500M users |
+| Game Leaderboard | Day 5 | [leaderboard.md](designs/leaderboard.md) | 100M players |
 
 ---
 
@@ -106,3 +116,5 @@
 | bit.ly / TinyURL | URL Shortener | Day 1 | [bitly.md](case-studies/bitly.md) |
 | GitHub Gist | Pastebin at scale | Day 2 | [github-gist.md](case-studies/github-gist.md) |
 | Uber Eats | Notification system | Day 3 | [uber-eats-notifications.md](case-studies/uber-eats-notifications.md) |
+| ESPN | Live scoreboard at scale | Day 4 | [espn-scoreboard.md](case-studies/espn-scoreboard.md) |
+| Clash of Clans | Global game leaderboard | Day 5 | [clash-of-clans-leaderboard.md](case-studies/clash-of-clans-leaderboard.md) |

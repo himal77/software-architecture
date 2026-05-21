@@ -467,6 +467,112 @@ Result: Correct ✅
 
 ---
 
+## Day 5 Revision — Covering Days 1–4 Content
+
+---
+
+**Q1. CP vs AP — what happens during a network partition in each? Give a concrete example.**
+
+Your answer: CP — system unavailable, focuses on consistency. Example: banking balance consistent regardless of location. AP — eventual consistency ok, lag acceptable. Example: ESPN scoreboard, 5 sec lag fine.
+
+Result: Correct ✅
+
+---
+
+**Q2. 4 consistency models strongest to weakest — with real-world example each.**
+
+Your answer: Linearizable (banking). Sequential (FB post/comment). Causal (post + related comment). Eventual (ESPN scoreboard).
+
+Correct answer: Sequential example is wrong — FB post/comment is causal (cause-effect relationship). Sequential = agreed global order without real-time guarantee. Better example: distributed message log, multi-player game move sequence.
+
+Result: Partial — sequential consistency wrong example.
+
+---
+
+**Q3. Why does polling fail at 500M users? What do you use instead? Show the math.**
+
+Your answer: 500M requests at once causes lag and crash. Use WebSocket push. 100M req/sec polling, 3,000 push updates/sec.
+
+Correct answer: ✅
+```
+Polling: 500M / 5sec = 100M req/sec → impossible
+Push:    10,000 matches × 1/30sec = ~333 updates/sec → trivial
+300,000× difference from one architectural decision
+```
+
+Result: Correct ✅
+
+---
+
+**Q4. Difference between causal and eventual consistency. When choose causal over eventual?**
+
+Your answer: Causal = related data consistent in order (post before comments). Eventual = same data updated, lag acceptable (scoreboard).
+
+Correct answer: Causal = reader never sees effect before cause. If you can see the reply, you must be able to see the original post. Independent operations can appear in any order.
+Eventual = all replicas converge eventually, no timing guarantee.
+
+Choose causal: collaborative document editing — User B edits paragraph based on User A's paragraph. Without causal, reader might see B's edit without A's original content.
+
+Result: Partial — right idea, imprecise definition of causal.
+
+---
+
+**Q5. Kafka CAP default and how to change to CP — what do you sacrifice?**
+
+Your answer: AP by default. Change with "time to consistency" parameter. Sacrifice availability.
+
+Correct answer: AP by default. Change with:
+- `acks=all` — producer waits for ALL in-sync replicas to acknowledge
+- `min.insync.replicas=2` — minimum 2 replicas must acknowledge
+
+Sacrifice: write latency increases 4–10× (5ms → 20–50ms). Producer blocks waiting for replication.
+
+Result: Partial — right concept, wrong parameter names.
+
+---
+
+**Q6. 10,000 matches × 200 bytes score record. Memory needed at CDN edge?**
+
+Your answer: 2000mb (initially). Corrected to 2MB after working through.
+
+Correct answer: 10,000 × 200 bytes = 2,000,000 bytes = 2MB.
+Architectural implication: 2MB fits in RAM of any server. Cache ALL scores on every edge node simultaneously. No eviction strategy needed. Push all updates on every score change. Origin gets zero read traffic.
+
+Result: Correct ✅ (after working through calculation)
+
+---
+
+**Q7. Consumer lag and duplicate delivery — causes, detection, fix for each.**
+
+Your answer: Consumer lag = producer writes faster than consumer reads. Duplicate = no ACK, message delivered twice. Fix duplicates with idempotency key.
+
+Correct answer:
+Consumer lag:
+- Cause ✅ — producer faster than consumer
+- Detect: Kafka consumer group lag metric, alert when lag > 100K messages
+- Fix: auto-scale workers, rate limit producers, expires_at check discards stale messages
+
+Duplicate delivery:
+- Cause ✅ — ACK lost, worker retries
+- Detect: monitor delivery count per notification_id > 1
+- Fix ✅ — idempotency key at provider level (not worker level)
+
+Result: Partial — causes correct, detection methods missing.
+
+---
+
+**Q8. You chose AP. Users see 30-sec staleness instead of 5-sec. Two most likely causes?**
+
+Your answer: Consistency happening in system (described CP behaviour). Then: Kafka not properly fanning out, single Kafka making it slow.
+
+Correct answer:
+1. **Consumer lag** — fan-out consumers fall behind producer. Score update queued in Kafka for 25+ sec before reaching edge nodes. Fix: monitor lag, auto-scale fan-out workers.
+2. **CDN TTL too high** — CDN caches score with TTL=30sec. Even after fan-out delivers update, CDN serves stale version. Fix: CDN TTL must match lag SLA (TTL=5sec for 5-sec guarantee).
+
+Result: Partial — one cause found after prompting, CDN TTL missed entirely.
+
+---
+
 ## Score Summary
 
 | Day | Score | Main Gaps |
@@ -474,3 +580,4 @@ Result: Correct ✅
 | Day 2 revision (Day 1 content) | 8.5/12 | CAP vs trade-off triangle, RPO/RTO unknown, hash-based collision misunderstood |
 | Day 3 revision (Day 1+2 content) | 8.5/12 | 5-step framework, NFR vs solution, dropping zeros in calculations, thundering herd mechanism |
 | Day 4 revision (Days 1–3 content) | 7.5/10 | Alternatives Considered is most important ADR element, NFR vs solution (recurring), wrong DB for 10B rows, consumer lag + idempotency unknown |
+| Day 5 revision (Days 1–4 content) | 7/8 | Sequential consistency wrong example, Kafka CP params unknown, detection methods missing, stale data causes needed prompting |
