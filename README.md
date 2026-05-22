@@ -34,7 +34,8 @@
 | 6 | Ch.2: Distributed Systems Theory | [day6-consensus-raft.md](notes/day6-consensus-raft.md) | ✅ Done |
 | 7 | Ch.2: Distributed Systems Theory | [day7-replication-strategies.md](notes/day7-replication-strategies.md) | ✅ Done |
 | 8 | Ch.2: Distributed Systems Theory | [day8-partitioning-sharding.md](notes/day8-partitioning-sharding.md) | ✅ Done |
-| 9–10 | Ch.2: Distributed Systems Theory | — | ⬜ |
+| 9 | Ch.2: Distributed Systems Theory | [day9-distributed-transactions.md](notes/day9-distributed-transactions.md) | ✅ Done |
+| 10 | Ch.2: Distributed Systems Theory | — | ⬜ |
 | 11–15 | Ch.3: Networking & Protocols | — | ⬜ |
 | 16–20 | Ch.4: API Design Patterns | — | ⬜ |
 
@@ -104,6 +105,10 @@
 | Polyglot Persistence | Day 7 | [polyglot-persistence.md](concepts/polyglot-persistence.md) |
 | Partitioning Strategies | Day 8 | [partitioning-strategies.md](concepts/partitioning-strategies.md) |
 | Consistent Hashing | Day 8 | [consistent-hashing.md](concepts/consistent-hashing.md) |
+| Two-Phase Commit (2PC) | Day 9 | [two-phase-commit.md](concepts/two-phase-commit.md) |
+| Saga Pattern | Day 9 | [saga-pattern.md](concepts/saga-pattern.md) |
+| Outbox Pattern | Day 9 | [outbox-pattern.md](concepts/outbox-pattern.md) |
+| Idempotency | Day 9 | [idempotency.md](concepts/idempotency.md) |
 
 ---
 
@@ -119,6 +124,7 @@
 | Distributed Lock Service | Day 6 | [distributed-lock-service.md](designs/distributed-lock-service.md) | 100 servers |
 | E-commerce Data Layer | Day 7 | [ecommerce-data-layer.md](designs/ecommerce-data-layer.md) | 100M users |
 | Messaging System | Day 8 | [messaging-system.md](designs/messaging-system.md) | 2B users |
+| Bitpanda Trade Saga | Day 9 | [bitpanda-trade-saga.md](designs/bitpanda-trade-saga.md) | Fintech trade flow |
 
 ---
 
@@ -134,3 +140,4 @@
 | Kubernetes etcd | Raft consensus in production | Day 6 | [kubernetes-etcd.md](case-studies/kubernetes-etcd.md) |
 | Amazon | Polyglot persistence | Day 7 | [amazon-polyglot.md](case-studies/amazon-polyglot.md) |
 | WhatsApp | Messaging at 2B-user scale | Day 8 | [whatsapp.md](case-studies/whatsapp.md) |
+| Stripe | Idempotency at fintech scale | Day 9 | [stripe-idempotency.md](case-studies/stripe-idempotency.md) |

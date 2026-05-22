@@ -914,6 +914,100 @@ Result: Correct ✅
 
 ---
 
+## Day 9 Revision — Covering Days 1–8 Content
+
+---
+
+**Q1. Name 3 partitioning strategies + 1 real DB each.**
+
+Your answer: hash-based ✅, directory-based ✅, location-based ❌.
+
+Correct: range-based (HBase, BigTable), hash-based (Cassandra), directory-based (Vitess).
+
+Result: Partial — 2/3.
+
+---
+
+**Q2. What is consistent hashing + what problem does it solve?**
+
+Your answer: hashing based on num of shards. Naive hash loads one shard a lot.
+
+Correct: Circle of values 0 to 2^32-1. Hash nodes onto positions. Hash keys onto positions. Owner = first node clockwise from key. Solves resharding pain — adding a node moves only ~1/N of keys instead of 80%.
+
+Result: Wrong — confused with virtual nodes, missed resharding pain.
+
+---
+
+**Q3. Natural shard key for messaging system?**
+
+Your answer: chat_id. Unique, holds chat info, same for individual and group chats.
+
+Result: Correct ✅
+
+---
+
+**Q4. Postgres default isolation level + Serializable use cases?**
+
+Your answer: read write. Result of transaction will change in between (good non-repeatable read example).
+
+Correct: Read Committed (recurring gap — 4th time wrong). Use Serializable for: bank transfers, inventory deduction, sequential ID generation.
+
+Result: Partial — example correct, term wrong.
+
+---
+
+**Q5. 100B msg/day × 100 bytes × 365 × 3 replication?**
+
+Your answer: 100B × 100 = 10TB × 365 = 3.65PB × 3 = 10.95PB.
+
+Result: Correct ✅
+
+---
+
+**Q6. Why single-leader Postgres bad for global payments? What instead?**
+
+Your answer: Synchronous replication slow. Use Spanner/CockroachDB.
+
+Sharpened: bigger problem is geography — single leader can't be near global users. NewSQL solves with regional writes + Paxos/Raft for ACID across regions.
+
+Result: Correct ✅
+
+---
+
+**Q7. 50M users, 5% trade daily, 10 trades each. Peak/sec?**
+
+Your answer: 2.5M × 10 = 25M/day. /86,400 = 289/sec. ×3 = 868/sec peak.
+
+Result: Correct ✅
+
+---
+
+**Q8. Metadata + blob pattern + 2 Bitpanda components?**
+
+Your answer: metadata in Postgres, blob in S3. Not sure about Bitpanda.
+
+Correct (taught): KYC documents (passport, ID, address proof), historical price data archives, transaction PDFs, profile pictures.
+
+Result: Partial — pattern correct, applications taught.
+
+---
+
+**Q9. Read-after-write trap + most common solution?**
+
+Your answer: Replication lag means follower has old data when read happens immediately after write. Solution: route writer's reads to leader for ~60 seconds after write.
+
+Result: Correct ✅ (cause description was muddled but landed)
+
+---
+
+**Q10. Name all 3 BASE properties without prompting.**
+
+Your answer: Basically available, soft state, eventual consistency.
+
+Result: Correct ✅ — instant recall
+
+---
+
 ## Score Summary
 
 | Day | Score | Main Gaps |
@@ -925,3 +1019,4 @@ Result: Correct ✅
 | Day 6 revision (Days 1–5 content) | 6/10 | Isolation levels unknown, Redis ZSET commands unknown, quorum math unknown, conflict strategies (only 1 of 3) |
 | Day 7 revision (Days 1–6 content) | 7/10 | FLP unknown, Cassandra leader/follower confusion, split brain unknown, capacity formula scrambled, isolation levels still unknown |
 | Day 8 revision (Days 1–7 content) | 6.5/10 | Concurrent users formula new variant, Postgres default term wrong, multi-leader/leaderless mixed up, vector clocks for carts missed, Cassandra wrong for read-heavy catalog |
+| Day 9 revision (Days 1–8 content) | 7.5/10 | Range-based as 3rd partitioning strategy missed, consistent hashing confused with vnodes, Read Committed term still wrong, metadata+blob applications missed initially |
