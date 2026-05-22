@@ -13,6 +13,7 @@
 | [90-day-curriculum.md](90-day-curriculum.md) | Full curriculum — all 16 chapters, progress tracker |
 | [rules.md](rules.md) | How each session works — revision quiz rules, note format |
 | [qa.md](qa.md) | All revision Q&A — every question, your answer, correction, score |
+| [bitpanda-project/](bitpanda-project/) | Capstone project plan — production-grade fintech app for portfolio |
 | [concepts/](concepts/) | One file per major concept — reference glossary |
 | [notes/](notes/) | One file per day — what was taught, designed, and learned |
 | [designs/](designs/) | System designs drawn during problems — full architecture docs |
