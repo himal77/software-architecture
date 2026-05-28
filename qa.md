@@ -1020,3 +1020,128 @@ Result: Correct ✅ — instant recall
 | Day 7 revision (Days 1–6 content) | 7/10 | FLP unknown, Cassandra leader/follower confusion, split brain unknown, capacity formula scrambled, isolation levels still unknown |
 | Day 8 revision (Days 1–7 content) | 6.5/10 | Concurrent users formula new variant, Postgres default term wrong, multi-leader/leaderless mixed up, vector clocks for carts missed, Cassandra wrong for read-heavy catalog |
 | Day 9 revision (Days 1–8 content) | 7.5/10 | Range-based as 3rd partitioning strategy missed, consistent hashing confused with vnodes, Read Committed term still wrong, metadata+blob applications missed initially |
+| Day 10 revision (Days 1–9 content) | 8.2/15 (55%) | Raft quorum formula wrong (said 2, correct is 3), 2PC fatal flaw unknown, hot spot patterns unknown, Lamport clocks unknown, read-after-write unknown, consistent hashing direction imprecise, range partition advantage missed (range queries), Read Committed anomaly missed (non-repeatable read) |
+
+---
+
+## Day 10 Revision — Covering Days 1–9
+
+---
+
+**Q1. Postgres default isolation level — exact term — and what anomaly does it allow?**
+
+Your answer: Read Committed. Only final committed reads allowed.
+
+Correct answer: **Read Committed** (name correct — first time in 5 quizzes). Anomaly it *still allows*: **non-repeatable reads** — same row read twice in same transaction can return different values if another transaction commits between reads. Score: 50%.
+
+---
+
+**Q2. CAP theorem — 3 properties and which you must give up during partition?**
+
+Your answer: Consistency, Availability, Partition Tolerance. Must give up either C or A during partition. Banking → CP. Shopping → AP.
+
+Correct answer: Exactly right. P is not optional — networks always partition. Score: 100%.
+
+---
+
+**Q3. Raft 5-node cluster — how many nodes must ACK before leader commits?**
+
+Your answer: One leader and one follower (= 2 nodes).
+
+Correct answer: **Quorum = ⌊N/2⌋ + 1 = 3 nodes** for 5-node cluster. Leader + 2 followers. "2 nodes" is not a majority — allows split brain. Score: 0%.
+
+---
+
+**Q4. Difference between orchestration and choreography in Saga?**
+
+Your answer: Orchestration = one system responsible for commit/revert. Choreography = not centralized, has instructions for positive/negative scenarios.
+
+Correct answer: Correct. Fixed from Day 9 where these were reversed. Score: 100%.
+
+---
+
+**Q5. What problem does the Outbox Pattern solve, and how?**
+
+Your answer: DB commit success + Kafka fail = lost message. Outbox: commit message + data in same DB transaction. Other service picks up and sends to Kafka.
+
+Correct answer: Perfect. The "other service" is the outbox publisher (polling or CDC via Debezium). Score: 100%.
+
+---
+
+**Q6. Consistent hashing — when a new node is added, which data moves and where?**
+
+Your answer: Only data from previous ring moves to next ring.
+
+Correct answer: When Node C is inserted between A and B, keys in range **(A → C]** move **from Node B to Node C**. Only 1/N of total data moves. Score: 60% — direction imprecise.
+
+---
+
+**Q7. Range vs hash partitioning — one advantage and one disadvantage each?**
+
+Your answer: Range = easier setup, can hot spot. Hash = even distribution, hard to setup.
+
+Correct answer: Range advantage = **range queries hit only relevant partitions** (not "easier setup"). Hash disadvantage = **range queries require scatter-gather** (not "hard to setup"). Score: 60%.
+
+---
+
+**Q8. Back-of-envelope: 500M DAU, 10 msgs/day each. Peak messages/sec?**
+
+Your answer: (500M × 10 / 86400) × 3 = ~173,600/sec peak.
+
+Correct answer: Exactly right. ×3 peak multiplier last. Score: 100%.
+
+---
+
+**Q9. What is linearizability? How does it differ from eventual consistency?**
+
+Your answer: Eventual consistency = data consistent eventually via messages. Linearizability = unsure.
+
+Correct answer: **Linearizability** = once a write completes, every subsequent read from any node sees it immediately. System behaves as single copy. Required for: distributed locks, leader election, bank balances. Eventual = window of inconsistency (seconds to minutes). Score: 50%.
+
+---
+
+**Q10. What problem does 2PC solve, and what is its fatal flaw?**
+
+Your answer: Not sure.
+
+Correct answer: **Solves:** atomic commits across multiple DBs/services — all commit or all rollback. **Fatal flaw:** if coordinator crashes after "Prepare" but before "Commit", all participants hold locks indefinitely waiting. System is **blocked** until coordinator recovers. Second flaw: external systems (Stripe, Kafka, Redis) don't support 2PC. Score: 0%.
+
+---
+
+**Q11. What does CP mean in CAP? Name a real CP database and why.**
+
+Your answer: CP = consistency + partition tolerance. Availability negotiable. Google Spanner is CP.
+
+Correct answer: Correct. CP system refuses requests during partition rather than risk stale data. Spanner uses TrueTime + Paxos. Other CP: etcd, ZooKeeper, HBase. Score: 100%.
+
+---
+
+**Q12. What is a hot spot? Two causes and fixes?**
+
+Your answer: Don't know.
+
+Correct answer: One partition gets disproportionate traffic. **Cause 1:** Time-based partition key → all writes go to "today" → fix: add random shard suffix (date-0, date-1...date-9). **Cause 2:** Celebrity/viral key → fix: cache hot key in Redis. **Cause 3:** Sequential ID → fix: use random UUIDs/Snowflake IDs. Score: 0%.
+
+---
+
+**Q13. What is a Lamport clock and what can it NOT tell you?**
+
+Your answer: Don't know.
+
+Correct answer: **Lamport clock** = logical counter per node. Rule 1: increment before every event. Rule 2: on receive, set to max(local, received) + 1. Gives causal ordering. **Cannot tell you:** if two events are concurrent (neither caused the other). For that: vector clocks (counter per node, used in DynamoDB/CRDTs). Score: 0%.
+
+---
+
+**Q14. What is the read-after-write problem and how do you solve it?**
+
+Your answer: Leader reads/writes but not synced, leader is dead.
+
+Correct answer: User writes profile → read routes to follower → follower not synced yet → user sees old data. **Three fixes:** (1) Route reads for own data to leader; (2) Track replication LSN, only use replicas caught up to that position; (3) Route all reads to leader for 1-2s after any write. Score: 0%.
+
+---
+
+**Q15. Same POST /trade received twice due to network retry — how to execute exactly once?**
+
+Your answer: Use idempotency key. Generate key, verify if processed, if yes return old result.
+
+Correct answer: Correct. 3 steps: (1) Client generates UUID before sending; (2) Server checks Redis for key; (3) If exists → return cached result, if not → execute + store result in Redis with 24h TTL. Score: 100%.

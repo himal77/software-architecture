@@ -35,7 +35,7 @@
 | 7 | Ch.2: Distributed Systems Theory | [day7-replication-strategies.md](notes/day7-replication-strategies.md) | ✅ Done |
 | 8 | Ch.2: Distributed Systems Theory | [day8-partitioning-sharding.md](notes/day8-partitioning-sharding.md) | ✅ Done |
 | 9 | Ch.2: Distributed Systems Theory | [day9-distributed-transactions.md](notes/day9-distributed-transactions.md) | ✅ Done |
-| 10 | Ch.2: Distributed Systems Theory | — | ⬜ |
+| 10 | Ch.2: Distributed Systems Theory | [day10-distributed-snapshots.md](notes/day10-distributed-snapshots.md) | ✅ Done |
 | 11–15 | Ch.3: Networking & Protocols | — | ⬜ |
 | 16–20 | Ch.4: API Design Patterns | — | ⬜ |
 
@@ -109,6 +109,7 @@
 | Saga Pattern | Day 9 | [saga-pattern.md](concepts/saga-pattern.md) |
 | Outbox Pattern | Day 9 | [outbox-pattern.md](concepts/outbox-pattern.md) |
 | Idempotency | Day 9 | [idempotency.md](concepts/idempotency.md) |
+| Distributed Snapshots | Day 10 | [distributed-snapshots.md](concepts/distributed-snapshots.md) |
 
 ---
 
@@ -125,6 +126,7 @@
 | E-commerce Data Layer | Day 7 | [ecommerce-data-layer.md](designs/ecommerce-data-layer.md) | 100M users |
 | Messaging System | Day 8 | [messaging-system.md](designs/messaging-system.md) | 2B users |
 | Bitpanda Trade Saga | Day 9 | [bitpanda-trade-saga.md](designs/bitpanda-trade-saga.md) | Fintech trade flow |
+| Stock Exchange Order Matching | Day 10 | [stock-exchange-order-matching.md](designs/stock-exchange-order-matching.md) | 500K orders/sec |
 
 ---
 
