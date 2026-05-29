@@ -36,7 +36,8 @@
 | 8 | Ch.2: Distributed Systems Theory | [day8-partitioning-sharding.md](notes/day8-partitioning-sharding.md) | ✅ Done |
 | 9 | Ch.2: Distributed Systems Theory | [day9-distributed-transactions.md](notes/day9-distributed-transactions.md) | ✅ Done |
 | 10 | Ch.2: Distributed Systems Theory | [day10-distributed-snapshots.md](notes/day10-distributed-snapshots.md) | ✅ Done |
-| 11–15 | Ch.3: Networking & Protocols | — | ⬜ |
+| 11 | Ch.3: Networking & Protocols | [day11-networking-protocols.md](notes/day11-networking-protocols.md) | ✅ Done |
+| 12–15 | Ch.3: Networking & Protocols | — | ⬜ |
 | 16–20 | Ch.4: API Design Patterns | — | ⬜ |
 
 ### Phase 2 — Data Layer Mastery (Days 21–40)
@@ -110,6 +111,11 @@
 | Outbox Pattern | Day 9 | [outbox-pattern.md](concepts/outbox-pattern.md) |
 | Idempotency | Day 9 | [idempotency.md](concepts/idempotency.md) |
 | Distributed Snapshots | Day 10 | [distributed-snapshots.md](concepts/distributed-snapshots.md) |
+| DNS | Day 11 | [dns.md](concepts/dns.md) |
+| TCP vs UDP | Day 11 | [tcp-udp.md](concepts/tcp-udp.md) |
+| TLS | Day 11 | [tls.md](concepts/tls.md) |
+| HTTP/1.1 vs HTTP/2 vs HTTP/3 | Day 11 | [http-versions.md](concepts/http-versions.md) |
+| WebSockets vs SSE vs Long Polling | Day 11 | [websockets-sse-longpolling.md](concepts/websockets-sse-longpolling.md) |
 
 ---
 
@@ -127,6 +133,7 @@
 | Messaging System | Day 8 | [messaging-system.md](designs/messaging-system.md) | 2B users |
 | Bitpanda Trade Saga | Day 9 | [bitpanda-trade-saga.md](designs/bitpanda-trade-saga.md) | Fintech trade flow |
 | Stock Exchange Order Matching | Day 10 | [stock-exchange-order-matching.md](designs/stock-exchange-order-matching.md) | 500K orders/sec |
+| Bitpanda API Layer | Day 11 | [bitpanda-api-layer.md](designs/bitpanda-api-layer.md) | 50K req/sec |
 
 ---
 

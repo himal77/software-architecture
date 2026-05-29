@@ -1021,6 +1021,7 @@ Result: Correct ✅ — instant recall
 | Day 8 revision (Days 1–7 content) | 6.5/10 | Concurrent users formula new variant, Postgres default term wrong, multi-leader/leaderless mixed up, vector clocks for carts missed, Cassandra wrong for read-heavy catalog |
 | Day 9 revision (Days 1–8 content) | 7.5/10 | Range-based as 3rd partitioning strategy missed, consistent hashing confused with vnodes, Read Committed term still wrong, metadata+blob applications missed initially |
 | Day 10 revision (Days 1–9 content) | 8.2/15 (55%) | Raft quorum formula wrong (said 2, correct is 3), 2PC fatal flaw unknown, hot spot patterns unknown, Lamport clocks unknown, read-after-write unknown, consistent hashing direction imprecise, range partition advantage missed (range queries), Read Committed anomaly missed (non-repeatable read) |
+| Day 11 revision (Days 1–10 content) | 12.1/15 (81%) | Lamport clock purpose/limitation mixed up, read-after-write fix wrong (quorum write ≠ single-leader fix), ACID isolation levels opened notes, WebSockets gap (used gRPC for client push), TLS termination argument wrong |
 
 ---
 
