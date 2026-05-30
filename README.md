@@ -38,7 +38,8 @@
 | 10 | Ch.2: Distributed Systems Theory | [day10-distributed-snapshots.md](notes/day10-distributed-snapshots.md) | ✅ Done |
 | 11 | Ch.3: Networking & Protocols | [day11-networking-protocols.md](notes/day11-networking-protocols.md) | ✅ Done |
 | 12 | Ch.3: Networking & Protocols | [day12-load-balancing-api-gateway-grpc.md](notes/day12-load-balancing-api-gateway-grpc.md) | ✅ Done |
-| 13–15 | Ch.3: Networking & Protocols | — | ⬜ |
+| 13 | Ch.3: Networking & Protocols | [day13-service-discovery-circuit-breakers.md](notes/day13-service-discovery-circuit-breakers.md) | ✅ Done |
+| 14–15 | Ch.3: Networking & Protocols | — | ⬜ |
 | 16–20 | Ch.4: API Design Patterns | — | ⬜ |
 
 ### Phase 2 — Data Layer Mastery (Days 21–40)
@@ -121,6 +122,10 @@
 | API Gateway | Day 12 | [api-gateway.md](concepts/api-gateway.md) |
 | gRPC | Day 12 | [grpc.md](concepts/grpc.md) |
 | Snapshot + Delta Pattern | Day 12 | [snapshot-delta-pattern.md](concepts/snapshot-delta-pattern.md) |
+| Service Discovery | Day 13 | [service-discovery.md](concepts/service-discovery.md) |
+| Circuit Breaker | Day 13 | [circuit-breaker.md](concepts/circuit-breaker.md) |
+| Retry Pattern | Day 13 | [retry-pattern.md](concepts/retry-pattern.md) |
+| Bulkhead Pattern | Day 13 | [bulkhead-pattern.md](concepts/bulkhead-pattern.md) |
 
 ---
 
