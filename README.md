@@ -37,7 +37,8 @@
 | 9 | Ch.2: Distributed Systems Theory | [day9-distributed-transactions.md](notes/day9-distributed-transactions.md) | ✅ Done |
 | 10 | Ch.2: Distributed Systems Theory | [day10-distributed-snapshots.md](notes/day10-distributed-snapshots.md) | ✅ Done |
 | 11 | Ch.3: Networking & Protocols | [day11-networking-protocols.md](notes/day11-networking-protocols.md) | ✅ Done |
-| 12–15 | Ch.3: Networking & Protocols | — | ⬜ |
+| 12 | Ch.3: Networking & Protocols | [day12-load-balancing-api-gateway-grpc.md](notes/day12-load-balancing-api-gateway-grpc.md) | ✅ Done |
+| 13–15 | Ch.3: Networking & Protocols | — | ⬜ |
 | 16–20 | Ch.4: API Design Patterns | — | ⬜ |
 
 ### Phase 2 — Data Layer Mastery (Days 21–40)
@@ -116,6 +117,10 @@
 | TLS | Day 11 | [tls.md](concepts/tls.md) |
 | HTTP/1.1 vs HTTP/2 vs HTTP/3 | Day 11 | [http-versions.md](concepts/http-versions.md) |
 | WebSockets vs SSE vs Long Polling | Day 11 | [websockets-sse-longpolling.md](concepts/websockets-sse-longpolling.md) |
+| Load Balancing | Day 12 | [load-balancing.md](concepts/load-balancing.md) |
+| API Gateway | Day 12 | [api-gateway.md](concepts/api-gateway.md) |
+| gRPC | Day 12 | [grpc.md](concepts/grpc.md) |
+| Snapshot + Delta Pattern | Day 12 | [snapshot-delta-pattern.md](concepts/snapshot-delta-pattern.md) |
 
 ---
 
@@ -134,6 +139,7 @@
 | Bitpanda Trade Saga | Day 9 | [bitpanda-trade-saga.md](designs/bitpanda-trade-saga.md) | Fintech trade flow |
 | Stock Exchange Order Matching | Day 10 | [stock-exchange-order-matching.md](designs/stock-exchange-order-matching.md) | 500K orders/sec |
 | Bitpanda API Layer | Day 11 | [bitpanda-api-layer.md](designs/bitpanda-api-layer.md) | 50K req/sec |
+| Live Order Book | Day 12 | [live-order-book.md](designs/live-order-book.md) | 500K concurrent users |
 
 ---
 
