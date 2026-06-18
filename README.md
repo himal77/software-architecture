@@ -39,7 +39,8 @@
 | 11 | Ch.3: Networking & Protocols | [day11-networking-protocols.md](notes/day11-networking-protocols.md) | ✅ Done |
 | 12 | Ch.3: Networking & Protocols | [day12-load-balancing-api-gateway-grpc.md](notes/day12-load-balancing-api-gateway-grpc.md) | ✅ Done |
 | 13 | Ch.3: Networking & Protocols | [day13-service-discovery-circuit-breakers.md](notes/day13-service-discovery-circuit-breakers.md) | ✅ Done |
-| 14–15 | Ch.3: Networking & Protocols | — | ⬜ |
+| 14 | Ch.3: Networking & Protocols | [day14-rate-limiting-timeouts-backpressure.md](notes/day14-rate-limiting-timeouts-backpressure.md) | ✅ Done |
+| 15 | Ch.3: Networking & Protocols | [day15-rest-api-design.md](notes/day15-rest-api-design.md) | ✅ Done |
 | 16–20 | Ch.4: API Design Patterns | — | ⬜ |
 
 ### Phase 2 — Data Layer Mastery (Days 21–40)
@@ -126,6 +127,9 @@
 | Circuit Breaker | Day 13 | [circuit-breaker.md](concepts/circuit-breaker.md) |
 | Retry Pattern | Day 13 | [retry-pattern.md](concepts/retry-pattern.md) |
 | Bulkhead Pattern | Day 13 | [bulkhead-pattern.md](concepts/bulkhead-pattern.md) |
+| Rate Limiting | Day 14 | [rate-limiting.md](concepts/rate-limiting.md) |
+| Back-pressure | Day 14 | [backpressure.md](concepts/backpressure.md) |
+| REST API Design | Day 15 | [rest-api-design.md](concepts/rest-api-design.md) |
 
 ---
 
