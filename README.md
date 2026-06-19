@@ -42,7 +42,8 @@
 | 14 | Ch.3: Networking & Protocols | [day14-rate-limiting-timeouts-backpressure.md](notes/day14-rate-limiting-timeouts-backpressure.md) | ✅ Done |
 | 15 | Ch.3: Networking & Protocols | [day15-rest-api-design.md](notes/day15-rest-api-design.md) | ✅ Done |
 | 16 | Ch.4: API Design Patterns | [day16-api-design-patterns.md](notes/day16-api-design-patterns.md) | ✅ Done |
-| 17–20 | Ch.4: API Design Patterns | — | ⬜ |
+| 17 | Ch.4: API Design Patterns | [day17-api-security.md](notes/day17-api-security.md) | ✅ Done |
+| 18–20 | Ch.4: API Design Patterns | — | ⬜ |
 
 ### Phase 2 — Data Layer Mastery (Days 21–40)
 | Day(s) | Chapter | Note | Status |
@@ -134,6 +135,10 @@
 | GraphQL | Day 16 | [graphql.md](concepts/graphql.md) |
 | Webhooks | Day 16 | [webhooks.md](concepts/webhooks.md) |
 | Backend for Frontend (BFF) | Day 16 | [bff-pattern.md](concepts/bff-pattern.md) |
+| JWT | Day 17 | [jwt.md](concepts/jwt.md) |
+| OAuth 2.0 | Day 17 | [oauth2.md](concepts/oauth2.md) |
+| API Keys | Day 17 | [api-keys.md](concepts/api-keys.md) |
+| BOLA | Day 17 | [bola.md](concepts/bola.md) |
 
 ---
 
@@ -153,6 +158,7 @@
 | Stock Exchange Order Matching | Day 10 | [stock-exchange-order-matching.md](designs/stock-exchange-order-matching.md) | 500K orders/sec |
 | Bitpanda API Layer | Day 11 | [bitpanda-api-layer.md](designs/bitpanda-api-layer.md) | 50K req/sec |
 | Live Order Book | Day 12 | [live-order-book.md](designs/live-order-book.md) | 500K concurrent users |
+| Bitpanda Auth System | Day 17 | [bitpanda-auth.md](designs/bitpanda-auth.md) | JWT + API key + mTLS |
 
 ---
 
