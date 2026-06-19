@@ -41,7 +41,8 @@
 | 13 | Ch.3: Networking & Protocols | [day13-service-discovery-circuit-breakers.md](notes/day13-service-discovery-circuit-breakers.md) | ✅ Done |
 | 14 | Ch.3: Networking & Protocols | [day14-rate-limiting-timeouts-backpressure.md](notes/day14-rate-limiting-timeouts-backpressure.md) | ✅ Done |
 | 15 | Ch.3: Networking & Protocols | [day15-rest-api-design.md](notes/day15-rest-api-design.md) | ✅ Done |
-| 16–20 | Ch.4: API Design Patterns | — | ⬜ |
+| 16 | Ch.4: API Design Patterns | [day16-api-design-patterns.md](notes/day16-api-design-patterns.md) | ✅ Done |
+| 17–20 | Ch.4: API Design Patterns | — | ⬜ |
 
 ### Phase 2 — Data Layer Mastery (Days 21–40)
 | Day(s) | Chapter | Note | Status |
@@ -130,6 +131,9 @@
 | Rate Limiting | Day 14 | [rate-limiting.md](concepts/rate-limiting.md) |
 | Back-pressure | Day 14 | [backpressure.md](concepts/backpressure.md) |
 | REST API Design | Day 15 | [rest-api-design.md](concepts/rest-api-design.md) |
+| GraphQL | Day 16 | [graphql.md](concepts/graphql.md) |
+| Webhooks | Day 16 | [webhooks.md](concepts/webhooks.md) |
+| Backend for Frontend (BFF) | Day 16 | [bff-pattern.md](concepts/bff-pattern.md) |
 
 ---
 
