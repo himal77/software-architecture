@@ -43,7 +43,8 @@
 | 15 | Ch.3: Networking & Protocols | [day15-rest-api-design.md](notes/day15-rest-api-design.md) | ✅ Done |
 | 16 | Ch.4: API Design Patterns | [day16-api-design-patterns.md](notes/day16-api-design-patterns.md) | ✅ Done |
 | 17 | Ch.4: API Design Patterns | [day17-api-security.md](notes/day17-api-security.md) | ✅ Done |
-| 18–20 | Ch.4: API Design Patterns | — | ⬜ |
+| 18 | Ch.4: API Design Patterns | [day18-event-driven-api-patterns.md](notes/day18-event-driven-api-patterns.md) | ✅ Done |
+| 19–20 | Ch.4: API Design Patterns | — | ⬜ |
 
 ### Phase 2 — Data Layer Mastery (Days 21–40)
 | Day(s) | Chapter | Note | Status |
@@ -139,6 +140,9 @@
 | OAuth 2.0 | Day 17 | [oauth2.md](concepts/oauth2.md) |
 | API Keys | Day 17 | [api-keys.md](concepts/api-keys.md) |
 | BOLA | Day 17 | [bola.md](concepts/bola.md) |
+| Event-Driven Patterns | Day 18 | [event-driven-patterns.md](concepts/event-driven-patterns.md) |
+| CloudEvents | Day 18 | [cloudevents.md](concepts/cloudevents.md) |
+| AsyncAPI | Day 18 | [asyncapi.md](concepts/asyncapi.md) |
 
 ---
 
