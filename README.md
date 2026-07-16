@@ -44,7 +44,8 @@
 | 16 | Ch.4: API Design Patterns | [day16-api-design-patterns.md](notes/day16-api-design-patterns.md) | ✅ Done |
 | 17 | Ch.4: API Design Patterns | [day17-api-security.md](notes/day17-api-security.md) | ✅ Done |
 | 18 | Ch.4: API Design Patterns | [day18-event-driven-api-patterns.md](notes/day18-event-driven-api-patterns.md) | ✅ Done |
-| 19–20 | Ch.4: API Design Patterns | — | ⬜ |
+| 19 | Ch.4: API Design Patterns | [day19-api-contract-testing.md](notes/day19-api-contract-testing.md) | ✅ Done |
+| 20 | Ch.4: API Design Patterns | — | ⬜ |
 
 ### Phase 2 — Data Layer Mastery (Days 21–40)
 | Day(s) | Chapter | Note | Status |
@@ -143,6 +144,7 @@
 | Event-Driven Patterns | Day 18 | [event-driven-patterns.md](concepts/event-driven-patterns.md) |
 | CloudEvents | Day 18 | [cloudevents.md](concepts/cloudevents.md) |
 | AsyncAPI | Day 18 | [asyncapi.md](concepts/asyncapi.md) |
+| API Contract Testing | Day 19 | [contract-testing.md](concepts/contract-testing.md) |
 
 ---
 
