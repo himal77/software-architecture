@@ -45,7 +45,7 @@
 | 17 | Ch.4: API Design Patterns | [day17-api-security.md](notes/day17-api-security.md) | ✅ Done |
 | 18 | Ch.4: API Design Patterns | [day18-event-driven-api-patterns.md](notes/day18-event-driven-api-patterns.md) | ✅ Done |
 | 19 | Ch.4: API Design Patterns | [day19-api-contract-testing.md](notes/day19-api-contract-testing.md) | ✅ Done |
-| 20 | Ch.4: API Design Patterns | — | ⬜ |
+| 20 | Ch.4: API Design Patterns | [day20-chapter4-wrapup-design.md](notes/day20-chapter4-wrapup-design.md) | ✅ Done |
 
 ### Phase 2 — Data Layer Mastery (Days 21–40)
 | Day(s) | Chapter | Note | Status |
@@ -165,6 +165,7 @@
 | Bitpanda API Layer | Day 11 | [bitpanda-api-layer.md](designs/bitpanda-api-layer.md) | 50K req/sec |
 | Live Order Book | Day 12 | [live-order-book.md](designs/live-order-book.md) | 500K concurrent users |
 | Bitpanda Auth System | Day 17 | [bitpanda-auth.md](designs/bitpanda-auth.md) | JWT + API key + mTLS |
+| Food Delivery API Layer | Day 20 | (in day20 note) | 5M customers, 10K orders/min |
 
 ---
 
