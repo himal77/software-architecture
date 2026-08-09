@@ -50,7 +50,8 @@
 ### Phase 2 — Data Layer Mastery (Days 21–40)
 | Day(s) | Chapter | Note | Status |
 |---|---|---|---|
-| 21–28 | Ch.5: Database Internals | — | ⬜ |
+| 21 | Ch.5: Database Internals | [day21-database-internals-storage.md](notes/day21-database-internals-storage.md) | ✅ Done |
+| 22–28 | Ch.5: Database Internals | — | ⬜ |
 | 29–33 | Ch.6: Caching | — | ⬜ |
 | 34–40 | Ch.7: Data Pipelines & Streaming | — | ⬜ |
 
@@ -145,6 +146,9 @@
 | CloudEvents | Day 18 | [cloudevents.md](concepts/cloudevents.md) |
 | AsyncAPI | Day 18 | [asyncapi.md](concepts/asyncapi.md) |
 | API Contract Testing | Day 19 | [contract-testing.md](concepts/contract-testing.md) |
+| Storage Engines (B-tree vs LSM) | Day 21 | [storage-engines.md](concepts/storage-engines.md) |
+| MVCC | Day 21 | [mvcc.md](concepts/mvcc.md) |
+| Write-Ahead Log | Day 21 | [write-ahead-log.md](concepts/write-ahead-log.md) |
 
 ---
 
