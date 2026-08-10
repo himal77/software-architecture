@@ -51,7 +51,8 @@
 | Day(s) | Chapter | Note | Status |
 |---|---|---|---|
 | 21 | Ch.5: Database Internals | [day21-database-internals-storage.md](notes/day21-database-internals-storage.md) | ✅ Done |
-| 22–28 | Ch.5: Database Internals | — | ⬜ |
+| 22 | Ch.5: Database Internals | [day22-indexing-query-planner.md](notes/day22-indexing-query-planner.md) | ✅ Done |
+| 23–28 | Ch.5: Database Internals | — | ⬜ |
 | 29–33 | Ch.6: Caching | — | ⬜ |
 | 34–40 | Ch.7: Data Pipelines & Streaming | — | ⬜ |
 
@@ -149,6 +150,8 @@
 | Storage Engines (B-tree vs LSM) | Day 21 | [storage-engines.md](concepts/storage-engines.md) |
 | MVCC | Day 21 | [mvcc.md](concepts/mvcc.md) |
 | Write-Ahead Log | Day 21 | [write-ahead-log.md](concepts/write-ahead-log.md) |
+| Indexing Strategy | Day 22 | [indexing-strategy.md](concepts/indexing-strategy.md) |
+| Query Planner & EXPLAIN | Day 22 | [query-planner.md](concepts/query-planner.md) |
 
 ---
 
