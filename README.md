@@ -52,7 +52,8 @@
 |---|---|---|---|
 | 21 | Ch.5: Database Internals | [day21-database-internals-storage.md](notes/day21-database-internals-storage.md) | ✅ Done |
 | 22 | Ch.5: Database Internals | [day22-indexing-query-planner.md](notes/day22-indexing-query-planner.md) | ✅ Done |
-| 23–28 | Ch.5: Database Internals | — | ⬜ |
+| 23 | Ch.5: Database Internals | [day23-transactions-isolation-locking.md](notes/day23-transactions-isolation-locking.md) | ✅ Done |
+| 24–28 | Ch.5: Database Internals | — | ⬜ |
 | 29–33 | Ch.6: Caching | — | ⬜ |
 | 34–40 | Ch.7: Data Pipelines & Streaming | — | ⬜ |
 
@@ -152,6 +153,9 @@
 | Write-Ahead Log | Day 21 | [write-ahead-log.md](concepts/write-ahead-log.md) |
 | Indexing Strategy | Day 22 | [indexing-strategy.md](concepts/indexing-strategy.md) |
 | Query Planner & EXPLAIN | Day 22 | [query-planner.md](concepts/query-planner.md) |
+| Locking Strategies | Day 23 | [locking-strategies.md](concepts/locking-strategies.md) |
+| Write Skew | Day 23 | [write-skew.md](concepts/write-skew.md) |
+| Spring Transaction Pitfalls | Day 23 | [spring-transaction-pitfalls.md](concepts/spring-transaction-pitfalls.md) |
 
 ---
 
